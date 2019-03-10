@@ -1,7 +1,5 @@
 import axios from 'axios'
-import {
-  getRedirectPath
-} from '../util'
+import { getRedirectPath } from '../util'
 
 const ERRMSG = 'ERRMSG'
 const AUTO_SUCCESS = 'AUTO_SUCCESS'
@@ -19,20 +17,26 @@ var initState = {
 export function user(state = initState, action) {
   switch (action.type) {
     case AUTO_SUCCESS:
-      return { ...state,
+      return {
+        ...state,
+        ...action.data,
         msg: '',
-        redirect: getRedirectPath({type: action.data.type, avatar: action.data.avatar}),
+        redirect: getRedirectPath({
+          type: action.data.type,
+          avatar: action.data.avatar
+        })
       }
     case INIT_DATA:
       return {
         ...state,
         ...action.data,
-        redirect: getRedirectPath({type: action.data.type, avatar: action.data.avatar})
+        redirect: getRedirectPath({
+          type: action.data.type,
+          avatar: action.data.avatar
+        })
       }
     case ERRMSG:
-      return { ...state,
-        msg: action.msg
-      }
+      return { ...state, msg: action.msg }
     default:
       return state
   }
@@ -67,56 +71,64 @@ export function register(name, pwd, twopwd, type) {
     return errMsg('两次密码不相同')
   }
   return dispatch => {
-    axios.post('/user/register', {
+    axios
+      .post('/user/register', {
         name,
         pwd,
         type
       })
-      .then(function (data) {
+      .then(function(data) {
         console.log(data)
         if (data.data.code === 1) {
-          dispatch(autoSuccess({
-            name,
-            pwd,
-            type
-          }))
+          dispatch(
+            autoSuccess({
+              name,
+              pwd,
+              type
+            })
+          )
         } else {
           dispatch(errMsg(data.data.msg))
         }
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .catch(function(error) {
+        console.log(error)
+      })
   }
 }
 
 export function login(name, pwd) {
   if (!name || !pwd) return errMsg('请填写用户名和密码')
   return dispatch => {
-    axios.get('/user/login', {
-      params: {
-        name,
-        pwd
-      }
-    }).then(data => {
-      if (data.data.code === 0) return dispatch(errMsg(data.data.msg))
-      dispatch(autoSuccess(data.data.doc))
-    })
+    axios
+      .get('/user/login', {
+        params: {
+          name,
+          pwd
+        }
+      })
+      .then(data => {
+        if (data.data.code === 0) return dispatch(errMsg(data.data.msg))
+        dispatch(autoSuccess(data.data.doc))
+      })
   }
 }
 
 // 第二个参数 0代表牛人 1代表boss
-export function updateUser({avatar, desc, company, money, require}, type) {
+export function updateUser({ avatar, desc, company, money, require }, type) {
   if (type) {
-    if (!avatar || !desc|| !company || !money || !require) return errMsg('请填写信息')
+    if (!avatar || !desc || !company || !money || !require)
+      return errMsg('请填写信息')
   } else {
     if (!avatar || !desc || !require) return errMsg('请填写信息')
   }
-  
+
   return dispatch => {
-    axios.post('/user/update', {avatar, desc, company, money, require}).then(data => {
-      if (data.data.code === 0) return dispatch(errMsg(data.data.msg))
-      dispatch(autoSuccess(data.data.doc))
-    })
+    axios
+      .post('/user/update', { avatar, desc, company, money, require })
+      .then(data => {
+        if (data.data.code === 0) return dispatch(errMsg(data.data.msg))
+        dispatch(autoSuccess(data.data.doc))
+      })
   }
 }

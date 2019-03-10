@@ -15,7 +15,8 @@ router.get('/info', (req, res) => {
   })
 })
 router.get('/list', (req, res) => {
-  UserModel.find({}, (err, doc) => {
+  const { type } = req.query
+  UserModel.find({type}, (err, doc) => {
     return res.json(doc)
   })
 })
