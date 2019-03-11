@@ -4,30 +4,25 @@ import { Card, WingBlank } from 'antd-mobile'
 import { getUserList } from '../../redux/chartUser'
 
 @connect(
-  state => ({ user: state.user }),
+  state => state,
   { getUserList }
 )
 class Boss extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      list: []
-    }
-  }
   componentDidMount() {
-    this.getUserList('0')
+    this.props.getUserList('0')
   }
 
   render() {
+    console.log(this.props.chartUser)
     return (
       <div>
         <WingBlank>
-          {this.state.list.map(v => (
+          {this.props.chartUser.userList.map(v => (
             <Card key={v._id} style={{marginBottom: 10}}>
               <Card.Header
-                title={v.company}
+                title={v.name}
                 thumb={v.avatar}
-                extra={<span>{v.desc + v.money}</span>}
+                extra={<span>{v.desc}</span>}
               />
               <Card.Body>
                 <div>{v.require}</div>

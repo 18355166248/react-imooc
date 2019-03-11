@@ -28,9 +28,9 @@ class Senior extends Component {
           {list.map(v => (
             <Card key={v._id} style={{ marginBottom: 10 }}>
               <Card.Header
-                title={v.name}
+                title={v.company}
                 thumb={v.avatar}
-                extra={<span>{v.desc}</span>}
+                extra={<span>{v.desc + '-' + v.money}</span>}
               />
               <Card.Body>
                 <div>{v.require}</div>
