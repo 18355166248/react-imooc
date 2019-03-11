@@ -53,6 +53,7 @@ class Dashboard extends Component {
         <NavBar mode="dark">{ (userList.find(v => v.path === pathname)) 
           && (userList.find(v => v.path === pathname)).name }</NavBar>
         
+        <NavList userList={userList}></NavList>
         <div style={{marginTop: 10}}>
           <Switch>
             {
@@ -62,7 +63,6 @@ class Dashboard extends Component {
             }
           </Switch>
         </div>
-        <NavList userList={userList}></NavList>
       </div>
     )
   }

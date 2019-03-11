@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Card, WingBlank } from 'antd-mobile'
 import { getUserList } from '../../redux/chartUser'
+import CommonCardInfo from '../../component/commonCardInfo/commonCardInfo'
 
 @connect(
   state => state,
@@ -13,23 +13,9 @@ class Boss extends Component {
   }
 
   render() {
-    console.log(this.props.chartUser)
     return (
       <div>
-        <WingBlank>
-          {this.props.chartUser.userList.map(v => (
-            <Card key={v._id} style={{marginBottom: 10}}>
-              <Card.Header
-                title={v.name}
-                thumb={v.avatar}
-                extra={<span>{v.desc}</span>}
-              />
-              <Card.Body>
-                <div>{v.require}</div>
-              </Card.Body>
-            </Card>
-          ))}
-        </WingBlank>
+        <CommonCardInfo list={this.props.chartUser.userList} />
       </div>
     )
   }

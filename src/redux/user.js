@@ -1,9 +1,13 @@
 import axios from 'axios'
-import { getRedirectPath } from '../util'
+import cookies from 'browser-cookies'
+import {
+  getRedirectPath
+} from '../util'
 
 const ERRMSG = 'ERRMSG'
 const AUTO_SUCCESS = 'AUTO_SUCCESS'
 const INIT_DATA = 'INIT_DATA'
+const LOGOUT_DATA = 'LOGOUT_DATA'
 
 var initState = {
   redirect: '',
@@ -35,8 +39,13 @@ export function user(state = initState, action) {
           avatar: action.data.avatar
         })
       }
+    case LOGOUT_DATA:
+      return initState
     case ERRMSG:
-      return { ...state, msg: action.msg }
+      return {
+        ...state,
+        msg: action.msg
+      }
     default:
       return state
   }
@@ -63,6 +72,12 @@ export function initData(data) {
   }
 }
 
+export function logoutUser() {
+  return {
+    type: LOGOUT_DATA
+  }
+}
+
 export function register(name, pwd, twopwd, type) {
   if (!name || !pwd || !twopwd) {
     return errMsg('用户名和密码不能为空')
@@ -77,7 +92,7 @@ export function register(name, pwd, twopwd, type) {
         pwd,
         type
       })
-      .then(function(data) {
+      .then(function (data) {
         console.log(data)
         if (data.data.code === 1) {
           dispatch(
@@ -91,7 +106,7 @@ export function register(name, pwd, twopwd, type) {
           dispatch(errMsg(data.data.msg))
         }
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error)
       })
   }
@@ -114,8 +129,21 @@ export function login(name, pwd) {
   }
 }
 
+export function logout() {
+  cookies.erase('userid')
+  return dispath => {
+    dispath(logoutUser())
+  }
+}
+
 // 第二个参数 0代表牛人 1代表boss
-export function updateUser({ avatar, desc, company, money, require }, type) {
+export function updateUser({
+  avatar,
+  desc,
+  company,
+  money,
+  require
+}, type) {
   if (type) {
     if (!avatar || !desc || !company || !money || !require)
       return errMsg('请填写信息')
@@ -125,7 +153,13 @@ export function updateUser({ avatar, desc, company, money, require }, type) {
 
   return dispatch => {
     axios
-      .post('/user/update', { avatar, desc, company, money, require })
+      .post('/user/update', {
+        avatar,
+        desc,
+        company,
+        money,
+        require
+      })
       .then(data => {
         if (data.data.code === 0) return dispatch(errMsg(data.data.msg))
         dispatch(autoSuccess(data.data.doc))

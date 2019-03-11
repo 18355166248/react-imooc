@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Card, WingBlank } from 'antd-mobile'
 import { getUserList } from '../../redux/chartUser'
+import CommonCardInfo from '../../component/commonCardInfo/commonCardInfo'
 
 @connect(
   state => state,
@@ -24,20 +24,7 @@ class Senior extends Component {
       : []
     return (
       <div>
-        <WingBlank>
-          {list.map(v => (
-            <Card key={v._id} style={{ marginBottom: 10 }}>
-              <Card.Header
-                title={v.company}
-                thumb={v.avatar}
-                extra={<span>{v.desc + '-' + v.money}</span>}
-              />
-              <Card.Body>
-                <div>{v.require}</div>
-              </Card.Body>
-            </Card>
-          ))}
-        </WingBlank>
+        <CommonCardInfo list={list} />
       </div>
     )
   }
