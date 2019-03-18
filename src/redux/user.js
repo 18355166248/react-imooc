@@ -40,7 +40,10 @@ export function user(state = initState, action) {
         })
       }
     case LOGOUT_DATA:
-      return initState
+      return {
+        ...initState,
+        redirect: '/login'
+      }
     case ERRMSG:
       return {
         ...state,

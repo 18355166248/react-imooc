@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { TabBar } from 'antd-mobile'
 
@@ -41,6 +41,15 @@ class NavList extends Component {
                   this.props.history.push(v.path)
                 }}
               >
+                <div style={{marginTop: 60}}>
+                  <Switch>
+                    {
+                      this.props.userList.map(v => (
+                        <Route key={v.path} path={v.path} component={v.component} />
+                      ))
+                    }
+                  </Switch>
+                </div>
               </TabBar.Item>
             ))
           }

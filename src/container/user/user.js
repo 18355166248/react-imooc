@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Result, List, WhiteSpace } from 'antd-mobile'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import { logout } from '../../redux/user'
 
 const Item = List.Item
@@ -13,10 +13,9 @@ const Brief = Item.Brief
   { logout }
 )
 class User extends Component {
-  componentDidUpdate() {
-    if (this.props.name === '') this.props.history.push('/login')
-  }
   render() {
+    // if (this.props.name === '') this.props.history.push('/login')
+
     const myImg = src => (
       <img
         src={src}
@@ -26,8 +25,9 @@ class User extends Component {
       />
     )
     const props = this.props
+    
     return (
-      <div>
+      props.name ? (<div>
         <Result
           img={myImg(props.avatar)}
           title={props.name}
@@ -47,9 +47,9 @@ class User extends Component {
         </List>
         <WhiteSpace />
         <List>
-          <Item onClick={this.props.logout}>退出登录</Item>
+          <Item onClick={props.logout}>退出登录</Item>
         </List>
-      </div>
+      </div>) : <Redirect to={props.redirect}/>
     )
   }
 }
