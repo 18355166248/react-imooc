@@ -45,7 +45,7 @@ class Register extends Component {
   render() {
     return (
       <div>
-        {this.props.user.redirect ? (
+        {this.props.user.redirect && this.props.user.redirect !== '/login' ? (
           <Redirect to={this.props.user.redirect} />
         ) : null}
         <Logo />

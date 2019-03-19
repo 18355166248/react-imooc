@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter, Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { TabBar } from 'antd-mobile'
+require('./style.css')
 
 @withRouter
 @connect(
@@ -12,8 +13,9 @@ class NavList extends Component {
   render() {
     const list = this.props.userList.filter(v => !v.hidden)
     const pathname = this.props.location.pathname
+
     return(
-      <div style={{position: 'fixed', height: '100%', width: '100%', top: 0}}>
+      <div style={{position: 'fixed', height: '100%', width: '100%', top: 0}} className='main-body'>
         <TabBar
           unselectedTintColor="#949494"
           tintColor="#33A3F4"

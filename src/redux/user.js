@@ -96,7 +96,6 @@ export function register(name, pwd, twopwd, type) {
         type
       })
       .then(function (data) {
-        console.log(data)
         if (data.data.code === 1) {
           dispatch(
             autoSuccess({
