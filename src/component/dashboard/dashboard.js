@@ -6,12 +6,20 @@ import Boss from '../../container/boss/boss'
 import Senior from '../../container/senior/senior'
 import User from '../../container/user/user'
 import Msg from '../../container/msg/msg'
+import { getMsgList, rescvMsg } from '../../redux/chatList'
 
 @connect(
-  state => state
+  state => state,
+  { getMsgList, rescvMsg }
 )
 class Dashboard extends Component {
 
+  componentDidMount() {
+    if (this.props.chatList.chatMsg.length === 0){
+      this.props.getMsgList()
+      this.props.rescvMsg()
+    }
+  }
   render() {
     const type = this.props.user.type
     const pathname = this.props.location.pathname

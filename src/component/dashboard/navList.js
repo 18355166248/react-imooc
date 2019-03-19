@@ -13,7 +13,6 @@ class NavList extends Component {
   render() {
     const list = this.props.userList.filter(v => !v.hidden)
     const pathname = this.props.location.pathname
-
     return(
       <div style={{position: 'fixed', height: '100%', width: '100%', top: 0}} className='main-body'>
         <TabBar
@@ -24,6 +23,7 @@ class NavList extends Component {
           {
             list.map(v => (
               <TabBar.Item
+                badge={ v.path === '/msg' ? this.props.chatList.unread : null }
                 title={ v.title }
                 key={ v.title }
                 icon={<div style={{

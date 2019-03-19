@@ -57,10 +57,18 @@ router.post('/update', (req, res) => {
 })
 // 获取聊天信息接口
 router.post('/getMsgList', (req, res) => {
-  ChatModel.find({}, (err, doc) => {
-    if (!err) {
-      return res.send({code: 1, doc})
-    }
+  const user = req.cookies.userid
+
+  UserModel.find({}, (err, doc) => {
+    let users = {}
+    doc.forEach(v => {
+      users[v._id] = {avatar: v.avatar, name: v.name}
+    });
+    ChatModel.find({'$or': [{from: user}, {to: user}]}, (err, doc) => {
+      if (!err) {
+        return res.send({code: 1, doc, users})
+      }
+    })
   })
 })
 

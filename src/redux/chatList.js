@@ -17,6 +17,7 @@ const MSG_READ = 'MSG_READ'
 
 const initState = {
   chatMsg: [],
+  users: {},
   unread: 0 // 未读信息数量
 }
 
@@ -24,7 +25,7 @@ export function chatList(state=initState, action) {
   switch(action.type) {
     case MSG_LIST:
       return {
-        ...state, chatMsg: action.data, unread: action.data.filter(v => !v.read).length
+        ...state, users: action.users, chatMsg: action.data, unread: action.data.filter(v => !v.read).length
       }
     case MSG_RECV:
       return {
@@ -36,10 +37,11 @@ export function chatList(state=initState, action) {
   }
 }
 
-function msgList(data) {
+function msgList(data, users) {
   return {
     type: MSG_LIST,
-    data
+    data,
+    users
   }
 }
 
@@ -53,7 +55,7 @@ function addRescv(data) {
 export function getMsgList() {
   return dispatch => {
     axios.post('/user/getMsgList').then(data => {
-      dispatch(msgList(data.data.doc))
+      dispatch(msgList(data.data.doc, data.data.users))
     })
   }
 }
