@@ -23,6 +23,15 @@ const models = {
     'company': {'type': String},
     'money': {'type': String},
     'require': {'type': String}
+  },
+  chat: {
+    'chatid': {'type': String, 'required': true},
+    'from': {'type': String, 'required': true},
+    'to': {'type': String, 'required': true},
+    // 是否未读
+    'read': {'type': Boolean, 'default': false},
+    'content': {'type': String, 'required': true},
+    'create_time': {'type': Number, 'default': new Date().getTime()},
   }
 }
 

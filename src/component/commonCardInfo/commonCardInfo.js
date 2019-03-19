@@ -1,8 +1,17 @@
 import React, { Component } from 'react'
 import { WingBlank, Card } from 'antd-mobile'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 
+@withRouter
+@connect(state => state.user)
 class CommonCardInfo extends Component {
+
+  handleClick = (v) => {
+    this.props.history.replace(`/chat/${v._id}`)
+  }
+
   render() {
     return (
       <WingBlank>
@@ -12,6 +21,7 @@ class CommonCardInfo extends Component {
               title={v.name}
               thumb={v.avatar}
               extra={<span>{v.desc}</span>}
+              onClick={() => this.handleClick(v)}
             />
             <Card.Body>
               {v.type === '1' ? <div>公司: {v.company}</div> : null}

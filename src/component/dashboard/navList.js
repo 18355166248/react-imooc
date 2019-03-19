@@ -40,7 +40,7 @@ class NavList extends Component {
                 }
                 selected={pathname === v.path}
                 onPress={() => {
-                  this.props.history.push(v.path)
+                  this.props.history.replace(v.path)
                 }}
               >
                 <div style={{marginTop: 60}}>

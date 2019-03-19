@@ -3,6 +3,7 @@ const router = express.Router()
 const model = require('./model')
 const { md5Function } = require('./util')
 const UserModel = model.getModel('user')
+const ChatModel = model.getModel('chat')
 const _fileter = {pwd: 0, _v: 0}
 
 router.get('/info', (req, res) => {
@@ -52,6 +53,14 @@ router.post('/update', (req, res) => {
     if(err) return res.json({code: 0, msg: '更新失败'})
     data = Object.assign(data, {name: doc.name, type: doc.type})
     return res.json({code: 1, doc: data})
+  })
+})
+// 获取聊天信息接口
+router.post('/getMsgList', (req, res) => {
+  ChatModel.find({}, (err, doc) => {
+    if (!err) {
+      return res.send({code: 1, doc})
+    }
   })
 })
 
