@@ -2,12 +2,6 @@ import axios from 'axios'
 import io from 'socket.io-client'
 const socket = io('ws://localhost:3001')
 
-// socket.on('resvmsg', data => {
-//   this.setState({
-//     msg : [...this.state.msg, data]
-//   })
-// }) 
-
 // 获取聊天列表
 const MSG_LIST = 'MSG_LIST'
 // 读取信息
@@ -21,55 +15,73 @@ const initState = {
   unread: 0 // 未读信息数量
 }
 
-export function chatList(state=initState, action) {
-  switch(action.type) {
+export function chatList(state = initState, action) {
+  switch (action.type) {
     case MSG_LIST:
       return {
-        ...state, users: action.users, chatMsg: action.data, unread: action.data.filter(v => !v.read).length
+        ...state,
+        users: action.users,
+        chatMsg: action.data,
+        unread: action.data.filter(v => !v.read && v.to === action.userid).length
       }
     case MSG_RECV:
+      const n = action.userid === action.data.to ? 1 : 0
       return {
-        ...state, chatMsg: [...state.chatMsg, action.data]
+        ...state,
+        chatMsg: [...state.chatMsg, action.data],
+        unread: state.unread + n
       }
-    // case MSG_READ:
-    default: 
+      // case MSG_READ:
+    default:
       return state
   }
 }
 
-function msgList(data, users) {
+function msgList(data, users, userid) {
   return {
     type: MSG_LIST,
     data,
-    users
+    users,
+    userid
   }
 }
 
-function addRescv(data) {
+function addRescv(data, userid) {
   return {
     type: MSG_RECV,
-    data
+    data,
+    userid
   }
 }
 
 export function getMsgList() {
-  return dispatch => {
+  return (dispatch, getState) => {
     axios.post('/user/getMsgList').then(data => {
-      dispatch(msgList(data.data.doc, data.data.users))
+      const userid = getState().user._id
+      dispatch(msgList(data.data.doc, data.data.users, userid))
     })
   }
 }
 
-export function sendMsg({from, to, msg}) {
+export function sendMsg({
+  from,
+  to,
+  msg
+}) {
   return dispatch => {
-    socket.emit('sendmsg', {from, to, msg})
+    socket.emit('sendmsg', {
+      from,
+      to,
+      msg
+    })
   }
 }
 
 export function rescvMsg() {
-  return dispatch => {
+  return (dispatch, getState) => {
     socket.on('rescvmsg', doc => {
-      dispatch(addRescv(doc))
+      const userid = getState().user._id
+      dispatch(addRescv(doc, userid))
     })
   }
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { List, InputItem, NavBar, Icon } from 'antd-mobile'
 import { connect } from 'react-redux'
+import { getChatid } from '../../util'
 import { getMsgList, sendMsg, rescvMsg } from '../../redux/chatList'
 require('./chat.css')
 
@@ -38,17 +39,21 @@ class Chat extends Component {
     const user = this.props.match.params.user
     const Item = List.Item
     const users = this.props.chatList.users
+    
+    const chatid = getChatid(user, this.props.user._id)
+    const chatMsg = this.props.chatList.chatMsg.filter(v => v.chatid === chatid)
+
     if (!users[user]) return null
     return (
       <div>
         <NavBar mode="dark" onLeftClick={() => this.handleBack()} icon={<Icon type="left" />}>{users[user].name}</NavBar>
-        <div className="chat-box">
-          {this.props.chatList.chatMsg.map((v, i) => {
+        <div className="chat-box" style={{marginBottom: 44, overflow: 'auto'}}>
+          {chatMsg.map((v, i) => {
             const avatar = `http://localhost:3000/${users[user].avatar}`
             const meAva = require(`../../../public/${this.props.user.avatar.split('/')[1]}`)
             return v.to == user ? (
               <List key={v._id}>
-                <Item extra={<img src={meAva}/>} className="chat-me">{v.content}</Item>
+                <Item extra={<img alt='' src={meAva}/>} className="chat-me">{v.content}</Item>
               </List>
             ) : (
               <List key={v._id}>

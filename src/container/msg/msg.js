@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import { List, InputItem, NavBar } from 'antd-mobile'
 import { connect } from 'react-redux'
 import { sendMsg, rescvMsg } from '../../redux/chatList'
-require('./chat.css')
+// require('./chat.css')
 
 @withRouter
 @connect(

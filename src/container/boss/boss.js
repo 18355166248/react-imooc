@@ -9,7 +9,7 @@ import CommonCardInfo from '../../component/commonCardInfo/commonCardInfo'
 )
 class Boss extends Component {
   componentDidMount() {
-    this.props.getUserList('0')
+    if (this.props.chartUser.userList.length === 0) this.props.getUserList('0')
   }
 
   render() {

@@ -15,7 +15,7 @@ class Senior extends Component {
     }
   }
   componentDidMount() {
-    this.props.getUserList('1')
+    if (this.props.chartUser.userList.length === 0) this.props.getUserList('1')
   }
 
   render() {
