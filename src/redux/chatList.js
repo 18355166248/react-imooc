@@ -22,7 +22,8 @@ export function chatList(state = initState, action) {
         ...state,
         users: action.users,
         chatMsg: action.data,
-        unread: action.data.filter(v => !v.read && v.to === action.userid).length
+        unread: action.data.filter(v => !v.read && v.to === action.userid)
+          .length
       }
     case MSG_RECV:
       const n = action.userid === action.data.to ? 1 : 0
@@ -31,7 +32,7 @@ export function chatList(state = initState, action) {
         chatMsg: [...state.chatMsg, action.data],
         unread: state.unread + n
       }
-      // case MSG_READ:
+    // case MSG_READ:
     default:
       return state
   }
@@ -63,11 +64,7 @@ export function getMsgList() {
   }
 }
 
-export function sendMsg({
-  from,
-  to,
-  msg
-}) {
+export function sendMsg({ from, to, msg }) {
   return dispatch => {
     socket.emit('sendmsg', {
       from,

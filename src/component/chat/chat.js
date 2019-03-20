@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { List, InputItem, NavBar, Icon } from 'antd-mobile'
+import { List, InputItem, NavBar, Icon, Grid } from 'antd-mobile'
 import { connect } from 'react-redux'
 import { getChatid } from '../../util'
 import { getMsgList, sendMsg, rescvMsg } from '../../redux/chatList'
@@ -16,14 +16,16 @@ class Chat extends Component {
     super(props)
     this.state = {
       value: '',
-      msg: []
+      msg: [],
+      emojiShow: false
     }
   }
   componentDidMount() {
-    if (this.props.chatList.chatMsg.length === 0){
+    if (this.props.chatList.chatMsg.length === 0) {
       this.props.getMsgList()
       this.props.rescvMsg()
     }
+    this.resetWindow()
   }
   handleSubmit() {
     const from = this.props.user._id
@@ -35,25 +37,53 @@ class Chat extends Component {
   handleBack() {
     this.props.history.replace(this.props.user.redirect)
   }
+  blur() {
+    window.scrollTo(0, 0)
+  }
+  resetWindow() {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'))
+    }, 0)
+  }
   render() {
     const user = this.props.match.params.user
     const Item = List.Item
     const users = this.props.chatList.users
-    
+
     const chatid = getChatid(user, this.props.user._id)
     const chatMsg = this.props.chatList.chatMsg.filter(v => v.chatid === chatid)
 
+    const emojiList = '😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 😗 😙 😚 🙂 🤗 🤩 🤔 🤨 😐 😑 😶 🙄 😏 😣 😥 😮 🤐 😯 😪 😫 😴 😌 😛 😜 😝 🤤 😒 😓 😔 😕 🙃 🤑 😲 ☹️ 🙁 😖 😞 😟 😤 😢 😭 😦 😧 😨 😩 🤯 😬 😰 😱 😳 🤪 😵 😡 😠 🤬 😷 🤒 🤕 🤢 🤮 🤧 😇 🤠 🤡 🤥 🤫 🤭 🧐 🤓 😈 👿 👹 👺 💀 👻 👽 🤖 💩 😺 😸 😹 😻 😼 😽 🙀 😿 😾'
+      .split(' ')
+      .filter(v => v)
+      .map(v => ({
+        text: v
+      }))
     if (!users[user]) return null
     return (
       <div>
-        <NavBar mode="dark" onLeftClick={() => this.handleBack()} icon={<Icon type="left" />}>{users[user].name}</NavBar>
-        <div className="chat-box" style={{marginBottom: 44, overflow: 'auto'}}>
+        <NavBar
+          className='header-chat'
+          mode="dark"
+          onLeftClick={() => this.handleBack()}
+          icon={<Icon type="left" />}
+        >
+          {users[user].name}
+        </NavBar>
+        <div
+          className="chat-box"
+          style={{ marginBottom: 44, overflow: 'auto' }}
+        >
           {chatMsg.map((v, i) => {
             const avatar = `http://localhost:3000/${users[user].avatar}`
-            const meAva = require(`../../../public/${this.props.user.avatar.split('/')[1]}`)
+            const meAva = require(`../../../public/${
+              this.props.user.avatar.split('/')[1]
+            }`)
             return v.to == user ? (
               <List key={v._id}>
-                <Item extra={<img alt='' src={meAva}/>} className="chat-me">{v.content}</Item>
+                <Item extra={<img alt="" src={meAva} />} className="chat-me">
+                  {v.content}
+                </Item>
               </List>
             ) : (
               <List key={v._id}>
@@ -70,8 +100,27 @@ class Chat extends Component {
               onChange={v => {
                 this.setState({ value: v })
               }}
-              extra={<span onClick={() => this.handleSubmit()}>发送</span>}
+              onBlur={() => this.blur()}
+              extra={
+                <div>
+                  <span onClick={() => {
+                    this.setState({ emojiShow: !this.state.emojiShow })
+                    this.resetWindow()
+                  }}>😄</span>
+                  <span onClick={() => this.handleSubmit()}>发送</span>
+                </div>
+              }
             />
+            {this.state.emojiShow ? (
+              <Grid
+                className="emoji"
+                data={emojiList}
+                isCarousel
+                columnNum={9}
+                carouselMaxRow={4}
+                onClick={el => this.setState({value: this.state.value + el.text})}
+              />
+            ) : null}
           </List>
         </div>
       </div>

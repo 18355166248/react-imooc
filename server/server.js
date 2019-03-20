@@ -12,7 +12,6 @@ const io = require('socket.io')(http)
 
 io.on('connection', function(socket) {
   socket.on('sendmsg', data => {
-    console.log(data)
     const {from, to, msg} = data
     const chatid = [from, to].sort().join('_')
     ChatModel.create({chatid, from, to, content: msg}, (err, doc) => {

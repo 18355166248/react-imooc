@@ -1,8 +1,25 @@
+.header-chat {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
 .chat-footer {
   position: fixed;
   bottom: 0;
   width: 100%;
   z-index: 9;
+}
+.chat-box {
+  margin-bottom: 44px;
+  overflow: auto;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  padding-top: 45px;
+  padding-bottom: 44px;
+  top: 0;
+  box-sizing: border-box;
 }
 .chat-box .chat-me .am-list-content {
   text-align: right;
@@ -10,4 +27,10 @@
 .chat-box .am-list-item .am-list-line .am-list-extra {
   flex-basis: auto;
   padding-left: 10px;
+}
+.emoji .am-grid-icon {
+  display: none;
+}
+.emoji .am-grid-text {
+  margin-top: 0!important;
 }
