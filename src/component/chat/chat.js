@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { List, InputItem, NavBar, Icon, Grid } from 'antd-mobile'
 import { connect } from 'react-redux'
-import { getChatid } from '../../util'
+import { getChatid, isIphoneX } from '../../util'
 import { getMsgList, sendMsg, rescvMsg } from '../../redux/chatList'
 require('./chat.css')
 
@@ -17,6 +17,7 @@ class Chat extends Component {
     this.state = {
       value: '',
       msg: [],
+      isX: false,
       emojiShow: false
     }
   }
@@ -25,6 +26,8 @@ class Chat extends Component {
       this.props.getMsgList()
       this.props.rescvMsg()
     }
+    if (isIphoneX()) this.setState({isX: true})
+    else this.setState({isX: false})
     this.resetWindow()
   }
   handleSubmit() {
@@ -92,7 +95,7 @@ class Chat extends Component {
             )
           })}
         </div>
-        <div className="chat-footer">
+        <div className="chat-footer" style={this.state.isX ? {bottom: 10} : {bottom: 0}}>
           <List>
             <InputItem
               placeholder="请输入"

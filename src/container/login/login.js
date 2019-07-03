@@ -18,7 +18,7 @@ class Login extends Component {
     this.handleLogin = this.handleLogin.bind(this)
   }
   register() {
-    this.props.history.push('/register')
+    this.props.history.replace('/register')
   }
   handleLogin() {
     this.props.login(this.props.state.name, this.props.state.pwd)
